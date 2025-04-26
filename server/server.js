@@ -35,7 +35,9 @@ io.on('connection', (socket) => {
     socket.join(roomId);
     socket.emit('room-joined', {
       roomId,
-      initialCode: rooms[roomId].code
+      initialCode: rooms[roomId].code,
+      language: 'javascript',
+      role: data.role
     });
     
     console.log(`Room created: ${roomId} by ${data.username}`);
@@ -43,7 +45,7 @@ io.on('connection', (socket) => {
 
   // Join an existing room
   socket.on('join-room', (data) => {
-    const { roomId, username } = data;
+    const { roomId, username, role } = data;
     
     if (!rooms[roomId]) {
       socket.emit('error', { message: 'Room not found' });
@@ -51,23 +53,45 @@ io.on('connection', (socket) => {
     }
     
     // Add user to room
-    rooms[roomId].users[socket.id] = username;
+    rooms[roomId].users[socket.id] = {
+      username: username,
+      role: role
+    };
     socket.join(roomId);
     
     // Notify user they've joined
     socket.emit('room-joined', {
       roomId,
       initialCode: rooms[roomId].code,
-      language: rooms[roomId].language
+      language: rooms[roomId].language,
+      role: role
     });
     
-    // Notify others in the room
+    // Send the new user information about all existing users in the room
+    const existingUsers = [];
+    for (const userId in rooms[roomId].users) {
+      if (userId !== socket.id) { // Don't include the current user
+        existingUsers.push({
+          userId,
+          username: rooms[roomId].users[userId].username,
+          role: rooms[roomId].users[userId].role
+        });
+      }
+    }
+    
+    // Send the list of existing users to the new user
+    if (existingUsers.length > 0) {
+      socket.emit('existing-users', { users: existingUsers });
+    }
+    
+    // Notify others in the room about the new user
     socket.to(roomId).emit('user-joined', {
       username,
-      userId: socket.id
+      userId: socket.id,
+      role: role
     });
     
-    console.log(`${username} joined room: ${roomId}`);
+    console.log(`${username} joined room: ${roomId} as ${role}`);
   });
 
   // Handle code updates
@@ -107,13 +131,16 @@ io.on('connection', (socket) => {
     // Find which room this user was in
     for (const roomId in rooms) {
       if (rooms[roomId].users[socket.id]) {
-        const username = rooms[roomId].users[socket.id];
+        const userData = rooms[roomId].users[socket.id];
         
         // Notify others in the room
         socket.to(roomId).emit('user-left', {
-          username,
-          userId: socket.id
+          username: userData.username,
+          userId: socket.id,
+          role: userData.role
         });
+        
+        console.log(`${userData.username} left room: ${roomId}`);
         
         // Remove user from room
         delete rooms[roomId].users[socket.id];

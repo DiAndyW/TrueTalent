@@ -12,6 +12,7 @@ const CodePair = () => {
   const [roomId, setRoomId] = useState('');
   const [username, setUsername] = useState('');
   const [partner, setPartner] = useState(null);
+  const [partnerRole, setPartnerRole] = useState(null);
   const [messages, setMessages] = useState([]);
   const [code, setCode] = useState('// Start coding here...');
   const [language, setLanguage] = useState('javascript');
@@ -40,18 +41,38 @@ const CodePair = () => {
       if (data.language) {
         setLanguage(data.language);
       }
+      setRole(data.role);
+    });
+    
+    // Handle information about existing users in the room
+    socketRef.current.on('existing-users', (data) => {
+      if (data.users && data.users.length > 0) {
+        // Just using the first user for simplicity
+        // In a multi-user scenario, you'd need to handle multiple users
+        const firstUser = data.users[0];
+        setPartner(firstUser.username);
+        setPartnerRole(firstUser.role);
+        setMessages(prev => [...prev, {
+          type: 'system',
+          content: `${firstUser.username} is already in the room as ${firstUser.role}`
+        }]);
+      }
     });
 
     socketRef.current.on('user-joined', (data) => {
       setPartner(data.username);
+      setPartnerRole(data.role);
       setMessages(prev => [...prev, {
         type: 'system',
-        content: `${data.username} has joined the room`
+        content: `${data.username} has joined the room as ${data.role}`
       }]);
     });
 
     socketRef.current.on('user-left', (data) => {
-      setPartner(null);
+      if (data.username === partner) {
+        setPartner(null);
+        setPartnerRole(null);
+      }
       setMessages(prev => [...prev, {
         type: 'system',
         content: `${data.username} has left the room`
@@ -174,7 +195,7 @@ const CodePair = () => {
         <div className="logo">CodePair</div>
         <div className="room-info">
           Room: <span className="room-id" onClick={copyRoomIdToClipboard} title="Click to copy">{roomId}</span>
-          {partner && <span className="partner">Coding with: {partner}</span>}
+          {partner && <span className="partner">Coding with: {partner} {partnerRole && `(${partnerRole})`}</span>}
           {!partner && <span className="waiting">Waiting for someone to join...</span>}
         </div>
         <div className="language-selector">
@@ -198,6 +219,8 @@ const CodePair = () => {
           sendMessage={sendMessage}
           username={username}
           partner={partner}
+          partnerRole={partnerRole}
+          role={role}
         />
       </div>
     </div>

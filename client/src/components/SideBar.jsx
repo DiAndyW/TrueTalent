@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './SideBar.css';
 
-const Sidebar = ({ messages, sendMessage, username, partner }) => {
+const Sidebar = ({ messages, sendMessage, username, partner, partnerRole, role }) => {
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef(null);
 
@@ -19,6 +19,10 @@ const Sidebar = ({ messages, sendMessage, username, partner }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  console.log('Role in Sidebar:', role);
+  console.log('Partner in Sidebar:', partner);
+  console.log('Partner Role in Sidebar:', partnerRole);
+
   return (
     <div className="sidebar">
       <div className="chat-header">
@@ -30,7 +34,7 @@ const Sidebar = ({ messages, sendMessage, username, partner }) => {
         {partner && (
           <div className="user-status">
             <span className="status-dot online"></span>
-            <span>{partner}</span>
+            <span>{partner} {partnerRole && `(${partnerRole})`}</span>
           </div>
         )}
       </div>

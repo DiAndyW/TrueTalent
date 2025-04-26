@@ -129,3 +129,50 @@
     font-style: italic;
     color: #888;
   }
+
+  .role-select {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #222;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+  }
+  
+  .role-select label {
+    font-weight: 600;
+    color: #b5eaff;
+    letter-spacing: 0.5px;
+    margin-right: 5px;
+  }
+  
+  .role-select select {
+    background-color: #333;
+    color: #e0e0e0;
+    border: 1px solid #555;
+    padding: 7px 14px;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.2s, background 0.2s;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 18px;
+    padding-right: 32px;
+  }
+  
+  .role-select select:focus {
+    border: 1.5px solid #4dc9ff;
+    background: #292929;
+  }
+  
+  .role-select select:hover {
+    background: #3a3a3a;
+  }
+  
