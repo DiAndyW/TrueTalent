@@ -3,7 +3,7 @@
 # pip install python-dotenv
 # pip install SpeechRecognition
 # pip install pyaudio
-
+# pip install flask flask-cors
 
 import asyncio
 import os
