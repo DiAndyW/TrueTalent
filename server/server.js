@@ -71,6 +71,18 @@ io.on('connection', (socket) => {
       role: data.role
     });
     
+     // Send the joining user information about all existing users
+    Object.entries(rooms[roomId].users).forEach(([userId, userData]) => {
+      // Don't send user their own information
+      if (userId !== socket.id) {
+        socket.emit('user-joined', {
+          username: userData.username,
+          userId: userId,
+          role: userData.role
+        });
+      }
+    });
+
     // Notify others in the room
     socket.to(roomId).emit('user-joined', {
       username,
@@ -118,11 +130,11 @@ io.on('connection', (socket) => {
     // Find which room this user was in
     for (const roomId in rooms) {
       if (rooms[roomId].users[socket.id]) {
-        const username = rooms[roomId].users[socket.id];
+        const userData = rooms[roomId].users[socket.id];
         
         // Notify others in the room
         socket.to(roomId).emit('user-left', {
-          username,
+          username: userData.username,
           userId: socket.id
         });
         

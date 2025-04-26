@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './SideBar.css';
 
-const Sidebar = ({ messages, sendMessage, username, partner, role}) => {
+const Sidebar = ({ messages, sendMessage, username, partners, role }) => {
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef(null);
 
@@ -19,7 +19,21 @@ const Sidebar = ({ messages, sendMessage, username, partner, role}) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  console.log('Role in Sidebar:', role);
+  // Render partners list
+  const renderPartners = () => {
+    if (!partners || Object.keys(partners).length === 0) {
+      return null;
+    }
+
+    return Object.values(partners).map((partner, index) => (
+      <div className="user-status" key={index}>
+        <span className="status-dot online"></span>
+        <span>{partner.username} ({partner.role})</span>
+      </div>
+    ));
+  };
+
+  console.log("Current partners:", partners); // Add this log to debug
 
   return (
     <div className="sidebar">
@@ -27,21 +41,16 @@ const Sidebar = ({ messages, sendMessage, username, partner, role}) => {
         <h3>Chat</h3>
         <div className="user-status">
           <span className="status-dot online"></span>
-          <span>{username} {role} (You)</span>
+          <span>{username} ({role}) (You)</span>
         </div>
-        {partner && (
-          <div className="user-status">
-            <span className="status-dot online"></span>
-            <span>{partner}</span>
-          </div>
-        )}
+        {renderPartners()}
       </div>
       
       <div className="chat-messages">
         {messages.length === 0 ? (
           <div className="empty-chat">
             <p>No messages yet</p>
-            {!partner && <p>Waiting for someone to join...</p>}
+            {Object.keys(partners).length === 0 && <p>Waiting for someone to join...</p>}
           </div>
         ) : (
           messages.map((msg, index) => (

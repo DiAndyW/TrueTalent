@@ -11,7 +11,7 @@ const CodePair = () => {
   const [connected, setConnected] = useState(false);
   const [roomId, setRoomId] = useState('');
   const [username, setUsername] = useState('');
-  const [partner, setPartner] = useState(null);
+  const [partners, setPartners] = useState({}); // Changed to an object to store multiple users
   const [messages, setMessages] = useState([]);
   const [code, setCode] = useState('// Start coding here...');
   const [language, setLanguage] = useState('javascript');
@@ -44,9 +44,23 @@ const CodePair = () => {
       }
       setRole(data.role);
     });
-
+    
     socketRef.current.on('user-joined', (data) => {
-      setPartner(data.username);
+      console.log('User joined event received:', data);
+      
+      // Add new user to partners list
+      setPartners(prev => {
+        const newPartners = {
+          ...prev,
+          [data.userId]: {
+            username: data.username,
+            role: data.role
+          }
+        };
+        console.log('Updated partners:', newPartners);
+        return newPartners;
+      });
+      
       setMessages(prev => [...prev, {
         type: 'system',
         content: `${data.username} has joined the room`
@@ -54,7 +68,13 @@ const CodePair = () => {
     });
 
     socketRef.current.on('user-left', (data) => {
-      setPartner(null);
+      // Remove user from partners list
+      setPartners(prev => {
+        const newPartners = { ...prev };
+        delete newPartners[data.userId];
+        return newPartners;
+      });
+      
       setMessages(prev => [...prev, {
         type: 'system',
         content: `${data.username} has left the room`
@@ -143,6 +163,27 @@ const CodePair = () => {
     }, 2000);
   };
 
+  // Function to display partner information
+  const renderPartnersInfo = () => {
+    const partnersCount = Object.keys(partners).length;
+    
+    if (partnersCount === 0) {
+      return <span className="waiting">Waiting for someone to join...</span>;
+    }
+    
+    if (partnersCount === 1) {
+      const partnerId = Object.keys(partners)[0];
+      return <span className="partner">Coding with: {partners[partnerId].username}</span>;
+    }
+    
+    return (
+      <span className="partners">
+        Coding with: {Object.values(partners).map(p => p.username).join(', ')} 
+        ({partnersCount} users)
+      </span>
+    );
+  };
+
   if (!connected) {
     return (
       <div className="login-container">
@@ -186,8 +227,7 @@ const CodePair = () => {
         <div className="logo">CodePair</div>
         <div className="room-info">
           Room: <span className="room-id" onClick={copyRoomIdToClipboard} title="Click to copy">{roomId}</span>
-          {partner && <span className="partner">Coding with: {partner}</span>}
-          {!partner && <span className="waiting">Waiting for someone to join...</span>}
+          {renderPartnersInfo()}
         </div>
         <div className="language-selector">
           <select value={language} onChange={(e) => changeLanguage(e.target.value)}>
@@ -209,7 +249,7 @@ const CodePair = () => {
           messages={messages} 
           sendMessage={sendMessage}
           username={username}
-          partner={partner}
+          partners={partners} // Pass the partners object instead of single partner
           role={role}
         />
       </div>
