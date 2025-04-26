@@ -1,0 +1,131 @@
+/* components/CodePair.css */
+.codepair-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 60px;
+    background-color: #252526;
+    border-bottom: 1px solid #383838;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4dc9ff;
+  }
+  
+  .room-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .room-id {
+    font-weight: bold;
+    color: #4dc9ff;
+  }
+  
+  .partner {
+    background-color: #2d2d2d;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  .invite-button {
+    padding: 5px 10px;
+    background-color: #0e639c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .language-selector select {
+    background-color: #333333;
+    color: #e0e0e0;
+    border: 1px solid #555;
+    padding: 5px 10px;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 400px;
+    background-color: #252526;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .login-form input {
+    padding: 10px;
+    background-color: #333333;
+    border: 1px solid #555;
+    color: #e0e0e0;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .login-form button {
+    padding: 10px 15px;
+    background-color: #0e639c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .login-form button:hover {
+    background-color: #1177bb;
+  }
+  
+  .room-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .action-group {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .action-group input {
+    flex: 1;
+  }
+  
+  .action-divider {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+  }

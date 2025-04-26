@@ -1,0 +1,6 @@
+/* components/CodeEditor.css */
+.editor-container {
+    flex: 1;
+    height: 100%;
+    border-right: 1px solid #383838;
+  }
