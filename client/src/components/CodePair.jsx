@@ -3,9 +3,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import CodeEditor from './CodeEditor';
 import Sidebar from './SideBar';
+import ProblemSidebar from './ProblemSidebar';
 import './CodePair.css';
 
 const SOCKET_SERVER_URL = 'http://localhost:5001'; // Change this to your server URL
+
+//have this fetch all problems from leetcode graphql
+// then allow you to search through it
+const problems = [
+  { title: 'Two Sum' },
+  { title: 'Reverse Linked List' },
+  { title: 'Valid Parentheses' },
+  { title: 'Merge Intervals' },
+  { title: 'Binary Search' },
+  // Add more problems!
+];
 
 const CodePair = () => {
   const [connected, setConnected] = useState(false);
@@ -17,6 +29,7 @@ const CodePair = () => {
   const [language, setLanguage] = useState('javascript');
   const [error, setError] = useState('');
   const [role, setRole] = useState('interviewee'); 
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
   const socketRef = useRef(null);
   
 
@@ -93,6 +106,19 @@ const CodePair = () => {
       }]);
     });
 
+    // socketRef.current.on('question-selected', (data) => {
+    //   setSelectedQuestion(data.question);
+    // });
+    socketRef.current.on('question-selected', (data) => {
+      console.log('Question selected event received:', data);
+      // Check if data contains problem or question property
+      if (data.problem) {
+        setSelectedQuestion(data.problem);
+      } else if (data.question) {
+        setSelectedQuestion(data.question);
+      }
+    });
+
     socketRef.current.on('language-change', (data) => {
       setLanguage(data.language);
     });
@@ -126,6 +152,22 @@ const CodePair = () => {
     socketRef.current.emit('code-update', {
       roomId,
       code: newCode
+    });
+  };
+
+  // const pickQuestion = (question) => {
+  //   setSelectedQuestion(question);
+  //   socketRef.current.emit('question-selected', {
+  //     roomId,
+  //     question,
+  //   });
+  // };
+  const pickQuestion = (question) => {
+    console.log('Picking question:', question);
+    setSelectedQuestion(question);
+    socketRef.current.emit('question-selected', {
+      roomId,
+      problem: question,  
     });
   };
 
@@ -224,7 +266,16 @@ const CodePair = () => {
   return (
     <div className="codepair-container">
       <div className="header">
-        <div className="logo">CodePair</div>
+        {role === 'interviewer' && (
+        <div className="logo">
+          CodePair - Interviewer
+        </div>
+        )}
+        {role === 'interviewee' && (
+        <div className="logo">
+          CodePair - Interviewee
+        </div>
+        )}
         <div className="room-info">
           Room: <span className="room-id" onClick={copyRoomIdToClipboard} title="Click to copy">{roomId}</span>
           {renderPartnersInfo()}
@@ -240,6 +291,18 @@ const CodePair = () => {
         </div>
       </div>
       <div className="main-content">
+        {/* {role === "interviewer" && (
+        <div className="interviewer-tools">
+          <h2>Interviewer Tools</h2>
+          <p>You can set the question, language, and observe code in real-time.</p>
+        </div>
+        )} */}
+        <ProblemSidebar 
+          problems={problems} 
+          role={role}
+          selectedQuestion={selectedQuestion}
+          pickQuestion={pickQuestion}
+        />
         <CodeEditor 
           code={code} 
           onChange={updateCode} 
