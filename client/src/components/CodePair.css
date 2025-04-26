@@ -230,9 +230,9 @@
 
 
 .chat-toggle-button {
-  position: fixed;          /* Fix the button to a specific position */
-  bottom: 20px;             /* Distance from the bottom of the viewport */
-  left: 830px;               /* Distance from the left of the viewport */
+  position: fixed;          /* Fixed position instead of flex */
+  bottom: 20px;             /* Distance from bottom */
+  right: 330px;             /* Position it to the left of the AI chat panel */
   background-color: #0e639c;
   color: white;
   padding: 8px 16px;
@@ -242,12 +242,13 @@
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: background-color 0.2s;
+  z-index: 1000;            /* Ensure it's above other elements */
 }
 
 .chat-toggle-button_interviewee {
-  position: fixed;          /* Fix the button to a specific position */
-  bottom: 20px;             /* Distance from the bottom of the viewport */
-  left: 1100px;               /* Distance from the left of the viewport */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;              /* Right side of the screen */
   background-color: #0e639c;
   color: white;
   padding: 8px 16px;
@@ -257,6 +258,7 @@
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: background-color 0.2s;
+  z-index: 1000;
 }
 
 
@@ -281,9 +283,8 @@
 }
 /* Special Position for Interviewer */
 .chat-popup-interviewer {
-  bottom: 60px; /* Raise above Output */
-  left: 640px;   /* Move near Editor Output */
-  right: auto;
+  bottom: 80px; /* Raise above Output */
+  right: 330px;
 }
 
 /* Optional: Make responsive */
@@ -418,3 +419,4 @@
     font-style: italic;
     color: #888;
   }
+}

@@ -1,4 +1,3 @@
-
 // components/CodePair.jsx
 // npm install tesseract.js
 // npm install html2canvas
@@ -118,9 +117,6 @@ const CodePair = () => {
       }]);
     });
 
-    // socketRef.current.on('question-selected', (data) => {
-    //   setSelectedQuestion(data.question);
-    // });
     socketRef.current.on('question-selected', (data) => {
       console.log('Question selected event received:', data);
       // Check if data contains problem or question property
@@ -188,13 +184,6 @@ const CodePair = () => {
     });
   };
 
-  // const pickQuestion = (question) => {
-  //   setSelectedQuestion(question);
-  //   socketRef.current.emit('question-selected', {
-  //     roomId,
-  //     question,
-  //   });
-  // };
   const pickQuestion = (question) => {
     console.log('Picking question:', question);
     setSelectedQuestion(question);
@@ -279,6 +268,34 @@ const CodePair = () => {
     );
   };
 
+  const performOCR = async () => {
+    console.log('Performing OCR...');
+
+    const editorElement = document.querySelector('.editor-container .monaco-scrollable-element');
+    if (!editorElement) {
+      console.error('Code editor element not found');
+      return;
+    }
+
+    const canvas = await html2canvas(editorElement);
+    const imageData = canvas.toDataURL('image/png');
+    Tesseract.recognize(imageData, 'eng', {
+      logger: (info) => console.log(info),
+    })
+      .then(({ data: { text } }) => {
+        console.log('Detected text:', text);
+        saveTextForGemini(text);
+      })
+      .catch((error) => {
+        console.error('OCR error:', error);
+      });
+  };
+
+  const saveTextForGemini = (text) => {
+    console.log('Saving text for Gemini:', text);
+    // Do something with the text -> Gemini API
+  };
+
   if (!connected) {
     return (
       <div className="login-container">
@@ -316,48 +333,12 @@ const CodePair = () => {
     );
   }
 
-  const performOCR = async () => {
-    console.log('Performing OCR...');
-
-    const editorElement = document.querySelector('.editor-container .monaco-scrollable-element');
-    if (!editorElement) {
-      console.error('Code editor element not found');
-      return;
-    }
-
-    const canvas = await html2canvas(editorElement);
-    const imageData = canvas.toDataURL('image/png');
-    Tesseract.recognize(imageData, 'eng', {
-      logger: (info) => console.log(info),
-    })
-      .then(({ data: { text } }) => {
-        console.log('Detected text:', text);
-        saveTextForGemini(text);
-      })
-      .catch((error) => {
-        console.error('OCR error:', error);
-      });
-  };
-
-  const saveTextForGemini = (text) => {
-    console.log('Saving text for Gemini:', text);
-    // Do something with the text -> Gemini API
-  };
-
-
   return (
     <div className="codepair-container">
       <div className="header">
-        {role === 'interviewer' && (
         <div className="logo">
-          CodePair - Interviewer
+          CodePair - {role === 'interviewer' ? 'Interviewer' : 'Interviewee'}
         </div>
-        )}
-        {role === 'interviewee' && (
-        <div className="logo">
-          CodePair - Interviewee
-        </div>
-        )}
         <div className="room-info">
           Room: <span className="room-id" onClick={copyRoomIdToClipboard} title="Click to copy">{roomId}</span>
           {renderPartnersInfo()}
@@ -380,71 +361,74 @@ const CodePair = () => {
               <option value="java">Java</option>
             </select>
           </div>
-        <button onClick={performOCR} className="ocr-button">
-          Perform OCR
-        </button>
+          <button onClick={performOCR} className="ocr-button">
+            Perform OCR
+          </button>
+        </div>
       </div>
-  
+      
       <div className="main-content">
+        {/* Problem sidebar should be to the left */}
+        <ProblemSidebar 
+          problems={problems} 
+          role={role}
+          selectedQuestion={selectedQuestion}
+          pickQuestion={pickQuestion}
+        />
+        
         <div className="editor-output-container">
-          <ProblemSidebar 
-            problems={problems} 
-            role={role}
-            selectedQuestion={selectedQuestion}
-            pickQuestion={pickQuestion}
-          />
+          {/* Code editor in the middle */}
           <CodeEditor 
             code={code} 
             onChange={updateCode} 
             language={language}
           />
+          
+          {/* Output below the editor */}
           <CodeOutput 
             output={output}
             isLoading={isExecuting}
             error={outputError}
           />
-  
+
           {/* For Interviewer: Chat button inside output panel */}
-    {role === 'interviewer' && (
-      <button className="chat-toggle-button" onClick={() => setIsChatOpen(!isChatOpen)}>
-        {isChatOpen ? 'Close Chat' : 'Open Chat'}
-      </button>
-    )}
-  </div>
+          {role === 'interviewer' && (
+            <button className="chat-toggle-button" onClick={() => setIsChatOpen(!isChatOpen)}>
+              {isChatOpen ? 'Close Chat' : 'Open Chat'}
+            </button>
+          )}
+        </div>
+        
+          {/* For Interviewee: Chat button outside as usual */}
+          {role !== 'interviewer' && (
+            <button className="chat-toggle-button_interviewee" onClick={() => setIsChatOpen(!isChatOpen)}>
+              {isChatOpen ? 'Close Chat' : 'Open Chat'}
+            </button>
+          )}
 
-  {/* For Interviewee: Chat button outside as usual */}
-  {role !== 'interviewer' && (
-    <button className="chat-toggle-button_interviewee" onClick={() => setIsChatOpen(!isChatOpen)}>
-      {isChatOpen ? 'Close Chat' : 'Open Chat'}
-    </button>
-  )}
-
-  {/* AI Chat Panel only for interviewers */}
-  {role === 'interviewer' && (
-    <div className="ai-chat-panel">
-      <AIChatPanel />
-
-
-      </div>
-    </div>
-  )}
-
-  {/* Chat Popup */}
-  {isChatOpen && (
-    <div className={`chat-popup ${role === 'interviewer' ? 'chat-popup-interviewer' : ''}`}>
-      <Sidebar 
-        messages={messages} 
-        sendMessage={sendMessage}
-        username={username}
-        partners={partners}
-        role={role}
-            />
+        {/* For interviewer: AI chat panel to the right */}
+        {role === 'interviewer' && (
+          <div className="ai-chat-panel">
+            <AIChatPanel />
           </div>
         )}
-      </div> 
-  
-    </div> 
+      
+      {/* Chat popup */}
+      {isChatOpen && (
+        <div className={`chat-popup ${role === 'interviewer' ? 'chat-popup-interviewer' : ''}`}>
+          <Sidebar 
+            messages={messages} 
+            sendMessage={sendMessage}
+            username={username}
+            partners={partners}
+            role={role}
+          />
+        </div>
+      )}
+    </div>
+
+    </div>
   );
-}  
+};
 
 export default CodePair;
