@@ -106,3 +106,50 @@
   .chat-input button:hover {
     background-color: #1177bb;
   }
+
+  /* Add these additional styles to CodePair.css */
+.error-message {
+  background-color: #ff5252;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.room-id {
+  font-weight: bold;
+  color: #4dc9ff;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.room-id:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.waiting {
+  color: #ffab00;
+  font-style: italic;
+}
+
+.copy-notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  z-index: 1000;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
