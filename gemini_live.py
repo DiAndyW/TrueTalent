@@ -13,6 +13,8 @@ import speech_recognition as sr
 from audio import recognize_speech_from_mic
 
 from google import genai
+from google.genai import types
+
 from dotenv import load_dotenv
 
 load_dotenv()  
@@ -27,7 +29,15 @@ async def async_enumerate(aiterable, start=0):
         index += 1
 
 async def process_audio(message):
-    config = {"response_modalities": ["AUDIO"]}
+
+    config = {"system_instruction": types.Content(
+        parts=[
+            types.Part(
+                text="You are a careful interviewer who wants to hire the best and most handidate candidate."
+            )
+        ]
+    ),
+    "response_modalities": ["AUDIO"]}
 
     async with client.aio.live.connect(model=model, config=config) as session:
         wf = wave.open("audio.wav", "wb")
@@ -67,11 +77,17 @@ if __name__ == "__main__":
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
 
-    print("Please say something...")
-    speech = recognize_speech_from_mic(recognizer, microphone)
-    print("You said: " + speech["transcription"])
+    # Uncomment the following lines to use speech recognition
+    # print("Please say something...")
+    # speech = recognize_speech_from_mic(recognizer, microphone)
+    # print("You said: " + speech["transcription"])
 
-    transcription = speech["transcription"]
-    asyncio.run(process_audio(transcription))
-    asyncio.run(process_text(transcription))
+    gemini_audio_prompt = "Brainstorm a list of specific, tailored questions based the code that they wrote below. Ensure that the candidate is not cheating and can explain the code in detail."
+    code = "def hello_world():\n    print('Hello, world!')\n\nhello_world()"
+    # transcription = speech["transcription"]
+    transcription = "The time complexity of this code is O(n)"
+
+    asyncio.run(process_audio(gemini_audio_prompt + "\n" + code + "\n" + transcription))
+    
+    # asyncio.run(process_text(transcription))
 
