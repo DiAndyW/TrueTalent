@@ -1,11 +1,16 @@
 # https://ai.google.dev/gemini-api/docs/live
 # pip install -U google-genai
 # pip install python-dotenv
+# pip install SpeechRecognition
+# pip install pyaudio
 
 
 import asyncio
 import os
 import wave
+import speech_recognition as sr
+
+from audio import recognize_speech_from_mic
 
 from google import genai
 from dotenv import load_dotenv
@@ -59,6 +64,14 @@ async def process_text(msg):
 
 
 if __name__ == "__main__":
-    asyncio.run(process_audio("Hey Gemini, how do you win a hackathon?"))
-    asyncio.run(process_text("Hey Gemini, how do you eat a burrito?"))
+    recognizer = sr.Recognizer()
+    microphone = sr.Microphone()
+
+    print("Please say something...")
+    speech = recognize_speech_from_mic(recognizer, microphone)
+    print("You said: " + speech["transcription"])
+
+    transcription = speech["transcription"]
+    asyncio.run(process_audio(transcription))
+    asyncio.run(process_text(transcription))
 
