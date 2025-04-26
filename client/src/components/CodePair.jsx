@@ -1,9 +1,16 @@
 // components/CodePair.jsx
+// npm install tesseract.js
+// npm install html2canvas
+
+
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import CodeEditor from './CodeEditor';
 import Sidebar from './SideBar';
 import './CodePair.css';
+
+import Tesseract from 'tesseract.js';
+import html2canvas from 'html2canvas'; 
 
 const SOCKET_SERVER_URL = 'http://localhost:5001'; // Change this to your server URL
 
@@ -221,6 +228,35 @@ const CodePair = () => {
     );
   }
 
+  const performOCR = async () => {
+    console.log('Performing OCR...');
+
+    const editorElement = document.querySelector('.editor-container .monaco-scrollable-element');
+    if (!editorElement) {
+      console.error('Code editor element not found');
+      return;
+    }
+
+    const canvas = await html2canvas(editorElement);
+    const imageData = canvas.toDataURL('image/png');
+    Tesseract.recognize(imageData, 'eng', {
+      logger: (info) => console.log(info),
+    })
+      .then(({ data: { text } }) => {
+        console.log('Detected text:', text);
+        saveTextForGemini(text);
+      })
+      .catch((error) => {
+        console.error('OCR error:', error);
+      });
+  };
+
+  const saveTextForGemini = (text) => {
+    console.log('Saving text for Gemini:', text);
+    // Do something with the text -> Gemini API
+  };
+
+
   return (
     <div className="codepair-container">
       <div className="header">
@@ -229,6 +265,11 @@ const CodePair = () => {
           Room: <span className="room-id" onClick={copyRoomIdToClipboard} title="Click to copy">{roomId}</span>
           {renderPartnersInfo()}
         </div>
+
+        <button onClick={performOCR} className="ocr-button">
+          Perform OCR
+        </button>
+
         <div className="language-selector">
           <select value={language} onChange={(e) => changeLanguage(e.target.value)}>
             <option value="javascript">JavaScript</option>
