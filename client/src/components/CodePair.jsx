@@ -1,12 +1,32 @@
+
+// components/CodePair.jsx
+// npm install tesseract.js
+// npm install html2canvas
+
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import CodeEditor from './CodeEditor';
 import Sidebar from './SideBar';
 import CodeOutput from './CodeOutput';
+import ProblemSidebar from './ProblemSidebar';
 import './CodePair.css';
 import AIChatPanel from './AIChatPanel'; // Import the AI chat panel
 
+import Tesseract from 'tesseract.js';
+import html2canvas from 'html2canvas'; 
+
 const SOCKET_SERVER_URL = 'http://localhost:5001'; // Change this to your server URL
+
+//have this fetch all problems from leetcode graphql
+// then allow you to search through it
+const problems = [
+  { title: 'Two Sum' },
+  { title: 'Reverse Linked List' },
+  { title: 'Valid Parentheses' },
+  { title: 'Merge Intervals' },
+  { title: 'Binary Search' },
+  // Add more problems!
+];
 
 const CodePair = () => {
   const [connected, setConnected] = useState(false);
@@ -22,6 +42,7 @@ const CodePair = () => {
   const [outputError, setOutputError] = useState(null);
   const [isExecuting, setIsExecuting] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
   const socketRef = useRef(null);
   
   // Initialize socket connection
@@ -97,6 +118,19 @@ const CodePair = () => {
       }]);
     });
 
+    // socketRef.current.on('question-selected', (data) => {
+    //   setSelectedQuestion(data.question);
+    // });
+    socketRef.current.on('question-selected', (data) => {
+      console.log('Question selected event received:', data);
+      // Check if data contains problem or question property
+      if (data.problem) {
+        setSelectedQuestion(data.problem);
+      } else if (data.question) {
+        setSelectedQuestion(data.question);
+      }
+    });
+
     socketRef.current.on('language-change', (data) => {
       setLanguage(data.language);
       // Clear output when language changes
@@ -151,6 +185,22 @@ const CodePair = () => {
     socketRef.current.emit('code-update', {
       roomId,
       code: newCode
+    });
+  };
+
+  // const pickQuestion = (question) => {
+  //   setSelectedQuestion(question);
+  //   socketRef.current.emit('question-selected', {
+  //     roomId,
+  //     question,
+  //   });
+  // };
+  const pickQuestion = (question) => {
+    console.log('Picking question:', question);
+    setSelectedQuestion(question);
+    socketRef.current.emit('question-selected', {
+      roomId,
+      problem: question,  
     });
   };
 
@@ -266,14 +316,53 @@ const CodePair = () => {
     );
   }
 
+  const performOCR = async () => {
+    console.log('Performing OCR...');
+
+    const editorElement = document.querySelector('.editor-container .monaco-scrollable-element');
+    if (!editorElement) {
+      console.error('Code editor element not found');
+      return;
+    }
+
+    const canvas = await html2canvas(editorElement);
+    const imageData = canvas.toDataURL('image/png');
+    Tesseract.recognize(imageData, 'eng', {
+      logger: (info) => console.log(info),
+    })
+      .then(({ data: { text } }) => {
+        console.log('Detected text:', text);
+        saveTextForGemini(text);
+      })
+      .catch((error) => {
+        console.error('OCR error:', error);
+      });
+  };
+
+  const saveTextForGemini = (text) => {
+    console.log('Saving text for Gemini:', text);
+    // Do something with the text -> Gemini API
+  };
+
+
   return (
     <div className="codepair-container">
       <div className="header">
-        <div className="logo">CodePair</div>
+        {role === 'interviewer' && (
+        <div className="logo">
+          CodePair - Interviewer
+        </div>
+        )}
+        {role === 'interviewee' && (
+        <div className="logo">
+          CodePair - Interviewee
+        </div>
+        )}
         <div className="room-info">
           Room: <span className="room-id" onClick={copyRoomIdToClipboard} title="Click to copy">{roomId}</span>
           {renderPartnersInfo()}
         </div>
+
         <div className="controls">
           <button 
             className="execute-button" 
@@ -291,11 +380,19 @@ const CodePair = () => {
               <option value="java">Java</option>
             </select>
           </div>
-        </div>
+        <button onClick={performOCR} className="ocr-button">
+          Perform OCR
+        </button>
       </div>
   
       <div className="main-content">
         <div className="editor-output-container">
+          <ProblemSidebar 
+            problems={problems} 
+            role={role}
+            selectedQuestion={selectedQuestion}
+            pickQuestion={pickQuestion}
+          />
           <CodeEditor 
             code={code} 
             onChange={updateCode} 
@@ -326,6 +423,9 @@ const CodePair = () => {
   {role === 'interviewer' && (
     <div className="ai-chat-panel">
       <AIChatPanel />
+
+
+      </div>
     </div>
   )}
 

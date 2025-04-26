@@ -1,0 +1,70 @@
+.problem-sidebar {
+    width: 300px;
+    min-width: 200px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #252526; /* same background */
+  }
+  
+  .problem-header {
+    padding: 15px;
+    border-bottom: 1px solid #383838; /* same border */
+  }
+  
+  .problem-header h3 {
+    margin: 0 0 15px 0;
+  }
+  
+  .problem-list {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .problem-item {
+    padding: 8px 12px;
+    background-color: #333333; /* same as input background */
+    color: #e0e0e0;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .problem-item:hover {
+    background-color: #3b3b3b; /* match chat message background */
+  }
+  
+
+/* .problem-sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+  }
+  
+  .problem-sidebar h3 {
+    margin-bottom: 1rem;
+  }
+  
+  .problem-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .problem-item {
+    padding: 0.5rem 0;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .problem-item:hover {
+    background-color: #e2e6ea;
+  }
+   */
