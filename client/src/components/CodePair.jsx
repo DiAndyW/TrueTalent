@@ -1,6 +1,4 @@
 // components/CodePair.jsx
-// npm install tesseract.js
-// npm install html2canvas
 
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
@@ -10,9 +8,6 @@ import CodeOutput from './CodeOutput';
 import ProblemSidebar from './ProblemSidebar';
 import './CodePair.css';
 import AIChatPanel from './AIChatPanel'; // Import the AI chat panel
-
-import Tesseract from 'tesseract.js';
-import html2canvas from 'html2canvas'; 
 
 const SOCKET_SERVER_URL = 'http://localhost:5001'; // Change this to your server URL
 
@@ -268,8 +263,8 @@ const CodePair = () => {
     );
   };
 
-  const performOCR = async () => {
-    console.log('Performing OCR...');
+  const analyzeCode = async () => {
+    console.log('Analyzing code...');
 
     const editorElement = document.querySelector('.editor-container .monaco-scrollable-element');
     if (!editorElement) {
@@ -393,9 +388,6 @@ const CodePair = () => {
               <option value="java">Java</option>
             </select>
           </div>
-          <button onClick={performOCR} className="ocr-button">
-            Perform OCR
-          </button>
         </div>
       </div>
       
@@ -425,9 +417,15 @@ const CodePair = () => {
 
           {/* For Interviewer: Chat button inside output panel */}
           {role === 'interviewer' && (
-            <button className="chat-toggle-button" onClick={() => setIsChatOpen(!isChatOpen)}>
-              {isChatOpen ? 'Close Chat' : 'Open Chat'}
-            </button>
+            <div>
+              <button onClick={analyzeCode} className="analyze-code-button">
+                Analyze Code
+              </button>
+                  
+              <button className="chat-toggle-button" onClick={() => setIsChatOpen(!isChatOpen)}>
+                {isChatOpen ? 'Close Chat' : 'Open Chat'}
+              </button>
+            </div>
           )}
         </div>
         
