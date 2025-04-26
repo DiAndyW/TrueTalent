@@ -1,0 +1,155 @@
+/* components/SideBar.css */
+.sidebar {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    background-color: #252526;
+  }
+  
+  .chat-header {
+    padding: 15px;
+    border-bottom: 1px solid #383838;
+  }
+  
+  .chat-header h3 {
+    margin: 0 0 15px 0;
+  }
+  
+  .user-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+  
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  
+  .status-dot.online {
+    background-color: #4caf50;
+  }
+  
+  .chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .empty-chat {
+    color: #888;
+    text-align: center;
+    margin-top: 40px;
+  }
+  
+  .message-container {
+    max-width: 85%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    word-break: break-word;
+  }
+  
+  .message-container.self {
+    align-self: flex-end;
+    background-color: #2b5278;
+  }
+  
+  .message-container.other {
+    align-self: flex-start;
+    background-color: #3b3b3b;
+  }
+  
+  .message-container.system {
+    align-self: center;
+    background-color: transparent;
+    color: #888;
+    font-style: italic;
+    font-size: 12px;
+  }
+  
+  .message-username {
+    font-size: 12px;
+    margin-bottom: 2px;
+    color: #b3b3b3;
+  }
+  
+  .chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #383838;
+  }
+  
+  .chat-input input {
+    flex: 1;
+    padding: 8px 12px;
+    background-color: #333333;
+    border: 1px solid #555;
+    color: #e0e0e0;
+    border-radius: 4px;
+    margin-right: 8px;
+  }
+  
+  .chat-input button {
+    padding: 8px 16px;
+    background-color: #0e639c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .chat-input button:hover {
+    background-color: #1177bb;
+  }
+
+  /* Add these additional styles to CodePair.css */
+.error-message {
+  background-color: #ff5252;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.room-id {
+  font-weight: bold;
+  color: #4dc9ff;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.room-id:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.waiting {
+  color: #ffab00;
+  font-style: italic;
+}
+
+.copy-notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  z-index: 1000;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
