@@ -5,7 +5,7 @@ import CodeEditor from './CodeEditor';
 import Sidebar from './SideBar';
 import './CodePair.css';
 
-const SOCKET_SERVER_URL = 'http://localhost:5000'; // Change this to your server URL
+const SOCKET_SERVER_URL = 'http://localhost:5001'; // Change this to your server URL
 
 const CodePair = () => {
   const [connected, setConnected] = useState(false);
@@ -16,7 +16,9 @@ const CodePair = () => {
   const [code, setCode] = useState('// Start coding here...');
   const [language, setLanguage] = useState('javascript');
   const [error, setError] = useState('');
+  const [role, setRole] = useState('interviewee'); 
   const socketRef = useRef(null);
+  
 
   // Initialize socket connection
   useEffect(() => {
@@ -40,6 +42,7 @@ const CodePair = () => {
       if (data.language) {
         setLanguage(data.language);
       }
+      setRole(data.role);
     });
 
     socketRef.current.on('user-joined', (data) => {
@@ -83,7 +86,8 @@ const CodePair = () => {
     if (username && roomToJoin) {
       socketRef.current.emit('join-room', {
         roomId: roomToJoin,
-        username
+        username,
+        role
       });
     }
   };
@@ -91,7 +95,8 @@ const CodePair = () => {
   const createRoom = () => {
     if (username) {
       socketRef.current.emit('create-room', {
-        username
+        username,
+        role
       });
     }
   };
@@ -150,6 +155,13 @@ const CodePair = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+          <div className="role-select">
+            <label>Select your role:</label>
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="interviewee">Interviewee</option>
+              <option value="interviewer">Interviewer</option>
+            </select>
+          </div>
           <div className="room-actions">
             <div className="action-group">
               <input
@@ -198,6 +210,7 @@ const CodePair = () => {
           sendMessage={sendMessage}
           username={username}
           partner={partner}
+          role={role}
         />
       </div>
     </div>

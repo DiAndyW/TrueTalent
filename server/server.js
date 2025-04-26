@@ -24,18 +24,24 @@ io.on('connection', (socket) => {
 
   // Create a new room
   socket.on('create-room', (data) => {
+    console.log('Create room data received:', data);
     const roomId = uuidv4().substring(0, 8);
     rooms[roomId] = {
       code: '// Start coding here...',
       language: 'javascript',
       users: {}
     };
-    rooms[roomId].users[socket.id] = data.username;
+    rooms[roomId].users[socket.id] = {
+      username: data.username,
+      role: data.role
+    };
+    console.log('User role stored in room:', data.role);
     
     socket.join(roomId);
     socket.emit('room-joined', {
       roomId,
-      initialCode: rooms[roomId].code
+      initialCode: rooms[roomId].code,
+      role: data.role
     });
     
     console.log(`Room created: ${roomId} by ${data.username}`);
@@ -51,20 +57,25 @@ io.on('connection', (socket) => {
     }
     
     // Add user to room
-    rooms[roomId].users[socket.id] = username;
+    rooms[roomId].users[socket.id] = {
+      username: username,
+      role: data.role
+    };
     socket.join(roomId);
     
     // Notify user they've joined
     socket.emit('room-joined', {
       roomId,
       initialCode: rooms[roomId].code,
-      language: rooms[roomId].language
+      language: rooms[roomId].language,
+      role: data.role
     });
     
     // Notify others in the room
     socket.to(roomId).emit('user-joined', {
       username,
-      userId: socket.id
+      userId: socket.id,
+      role: data.role
     });
     
     console.log(`${username} joined room: ${roomId}`);
@@ -130,7 +141,7 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
