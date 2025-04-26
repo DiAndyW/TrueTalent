@@ -49,6 +49,10 @@
     cursor: pointer;
   }
   
+  .interviewer-tools {
+    background-color: #252526;
+  }
+
   .language-selector select {
     background-color: #333333;
     color: #e0e0e0;
