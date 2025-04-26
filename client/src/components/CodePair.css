@@ -1,131 +1,295 @@
-/* components/CodePair.css */
 .codepair-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 60px;
+  background-color: #252526;
+  border-bottom: 1px solid #383838;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4dc9ff;
+}
+
+.room-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.room-id {
+  font-weight: bold;
+  color: #4dc9ff;
+  cursor: pointer;
+}
+
+.partner, .partners, .waiting {
+  background-color: #2d2d2d;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.waiting {
+  color: #888;
+  font-style: italic;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.execute-button {
+  padding: 5px 15px;
+  background-color: #107c10;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  min-width: 100px;
+  transition: background-color 0.2s;
+}
+
+.execute-button:hover {
+  background-color: #138d13;
+}
+
+.execute-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.language-selector select {
+  background-color: #333333;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  padding: 5px 10px;
+  border-radius: 4px;
+  outline: none;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.editor-output-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 400px;
+  background-color: #252526;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.login-form input {
+  padding: 10px;
+  background-color: #333333;
+  border: 1px solid #555;
+  color: #e0e0e0;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.login-form button {
+  padding: 10px 15px;
+  background-color: #0e639c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-form button:hover {
+  background-color: #1177bb;
+}
+
+.room-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.action-group {
+  display: flex;
+  gap: 10px;
+}
+
+.action-group input {
+  flex: 1;
+}
+
+.action-divider {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+}
+
+.role-select {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #222;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+
+.role-select label {
+  font-weight: 600;
+  color: #b5eaff;
+  letter-spacing: 0.5px;
+  margin-right: 5px;
+}
+
+.role-select select {
+  background-color: #333;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  padding: 7px 14px;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none;
+  transition: border 0.2s, background 0.2s;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 18px;
+  padding-right: 32px;
+}
+
+.role-select select:focus {
+  border: 1.5px solid #4dc9ff;
+  background: #292929;
+}
+
+.role-select select:hover {
+  background: #3a3a3a;
+}
+
+.copy-notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.error-message {
+  background-color: rgba(255, 70, 70, 0.2);
+  border: 1px solid #ff5a5a;
+  color: #ff9999;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+
+.chat-toggle-button {
+  position: fixed;          /* Fix the button to a specific position */
+  bottom: 20px;             /* Distance from the bottom of the viewport */
+  left: 830px;               /* Distance from the left of the viewport */
+  background-color: #0e639c;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s;
+}
+
+.chat-toggle-button_interviewee {
+  position: fixed;          /* Fix the button to a specific position */
+  bottom: 20px;             /* Distance from the bottom of the viewport */
+  left: 1100px;               /* Distance from the left of the viewport */
+  background-color: #0e639c;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s;
+}
+
+
+.chat-toggle-button:hover {
+  background-color: #1177bb;
+}
+
+.chat-popup {
+  position: fixed;
+  bottom: 80px; /* above the toggle button */
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  background-color: #252526;
+  border: 1px solid #383838;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 1001;
+}
+/* Special Position for Interviewer */
+.chat-popup-interviewer {
+  bottom: 60px; /* Raise above Output */
+  left: 640px;   /* Move near Editor Output */
+  right: auto;
+}
+
+/* Optional: Make responsive */
+@media (max-width: 1200px) {
+  .chat-popup-interviewer {
+    left: 400px;
   }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    height: 60px;
-    background-color: #252526;
-    border-bottom: 1px solid #383838;
-  }
-  
-  .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #4dc9ff;
-  }
-  
-  .room-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .room-id {
-    font-weight: bold;
-    color: #4dc9ff;
-  }
-  
-  .partner {
-    background-color: #2d2d2d;
-    padding: 4px 8px;
-    border-radius: 4px;
-  }
-  
-  .invite-button {
-    padding: 5px 10px;
-    background-color: #0e639c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .language-selector select {
-    background-color: #333333;
-    color: #e0e0e0;
-    border: 1px solid #555;
-    padding: 5px 10px;
-    border-radius: 4px;
-    outline: none;
-  }
-  
-  .main-content {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-  
-  .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 400px;
-    background-color: #252526;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  .login-form input {
-    padding: 10px;
-    background-color: #333333;
-    border: 1px solid #555;
-    color: #e0e0e0;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .login-form button {
-    padding: 10px 15px;
-    background-color: #0e639c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .login-form button:hover {
-    background-color: #1177bb;
-  }
-  
-  .room-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .action-group {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .action-group input {
-    flex: 1;
-  }
-  
-  .action-divider {
-    text-align: center;
-    font-style: italic;
-    color: #888;
-  }
+}
+

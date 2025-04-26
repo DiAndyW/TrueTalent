@@ -1,9 +1,10 @@
-// components/CodePair.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import CodeEditor from './CodeEditor';
 import Sidebar from './SideBar';
+import CodeOutput from './CodeOutput';
 import './CodePair.css';
+import AIChatPanel from './AIChatPanel'; // Import the AI chat panel
 
 const SOCKET_SERVER_URL = 'http://localhost:5001'; // Change this to your server URL
 
@@ -11,15 +12,18 @@ const CodePair = () => {
   const [connected, setConnected] = useState(false);
   const [roomId, setRoomId] = useState('');
   const [username, setUsername] = useState('');
-  const [partners, setPartners] = useState({}); // Changed to an object to store multiple users
+  const [partners, setPartners] = useState({});
   const [messages, setMessages] = useState([]);
   const [code, setCode] = useState('// Start coding here...');
   const [language, setLanguage] = useState('javascript');
   const [error, setError] = useState('');
-  const [role, setRole] = useState('interviewee'); 
+  const [role, setRole] = useState('interviewee');
+  const [output, setOutput] = useState('');
+  const [outputError, setOutputError] = useState(null);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const socketRef = useRef(null);
   
-
   // Initialize socket connection
   useEffect(() => {
     socketRef.current = io(SOCKET_SERVER_URL);
@@ -95,6 +99,27 @@ const CodePair = () => {
 
     socketRef.current.on('language-change', (data) => {
       setLanguage(data.language);
+      // Clear output when language changes
+      setOutput('');
+      setOutputError(null);
+    });
+    
+    // Add new event listeners for code execution
+    socketRef.current.on('code-execution-result', (data) => {
+      setIsExecuting(false);
+      if (data.error) {
+        setOutputError(data.error);
+        setOutput('');
+      } else {
+        setOutput(data.result);
+        setOutputError(null);
+      }
+    });
+
+    socketRef.current.on('code-execution-started', () => {
+      setIsExecuting(true);
+      setOutput('');
+      setOutputError(null);
     });
 
     return () => {
@@ -145,10 +170,30 @@ const CodePair = () => {
 
   const changeLanguage = (newLanguage) => {
     setLanguage(newLanguage);
+    // Clear output when language changes
+    setOutput('');
+    setOutputError(null);
+    
     socketRef.current.emit('language-change', {
       roomId,
       language: newLanguage
     });
+  };
+  
+  // New function to execute code
+  const executeCode = () => {
+    setIsExecuting(true);
+    socketRef.current.emit('execute-code', {
+      roomId,
+      code,
+      language
+    });
+    
+    // Also send a system message to chat that code is being executed
+    setMessages(prev => [...prev, {
+      type: 'system',
+      content: `${username} executed the code`
+    }]);
   };
 
   const copyRoomIdToClipboard = () => {
@@ -229,32 +274,77 @@ const CodePair = () => {
           Room: <span className="room-id" onClick={copyRoomIdToClipboard} title="Click to copy">{roomId}</span>
           {renderPartnersInfo()}
         </div>
-        <div className="language-selector">
-          <select value={language} onChange={(e) => changeLanguage(e.target.value)}>
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="html">HTML</option>
-            <option value="css">CSS</option>
-            <option value="java">Java</option>
-          </select>
+        <div className="controls">
+          <button 
+            className="execute-button" 
+            onClick={executeCode}
+            disabled={isExecuting}
+          >
+            {isExecuting ? 'Running...' : 'Run Code'}
+          </button>
+          <div className="language-selector">
+            <select value={language} onChange={(e) => changeLanguage(e.target.value)}>
+              <option value="javascript">JavaScript</option>
+              <option value="python">Python</option>
+              <option value="html">HTML</option>
+              <option value="css">CSS</option>
+              <option value="java">Java</option>
+            </select>
+          </div>
         </div>
       </div>
+  
       <div className="main-content">
-        <CodeEditor 
-          code={code} 
-          onChange={updateCode} 
-          language={language}
-        />
-        <Sidebar 
-          messages={messages} 
-          sendMessage={sendMessage}
-          username={username}
-          partners={partners} // Pass the partners object instead of single partner
-          role={role}
-        />
-      </div>
+        <div className="editor-output-container">
+          <CodeEditor 
+            code={code} 
+            onChange={updateCode} 
+            language={language}
+          />
+          <CodeOutput 
+            output={output}
+            isLoading={isExecuting}
+            error={outputError}
+          />
+  
+          {/* For Interviewer: Chat button inside output panel */}
+    {role === 'interviewer' && (
+      <button className="chat-toggle-button" onClick={() => setIsChatOpen(!isChatOpen)}>
+        {isChatOpen ? 'Close Chat' : 'Open Chat'}
+      </button>
+    )}
+  </div>
+
+  {/* For Interviewee: Chat button outside as usual */}
+  {role !== 'interviewer' && (
+    <button className="chat-toggle-button_interviewee" onClick={() => setIsChatOpen(!isChatOpen)}>
+      {isChatOpen ? 'Close Chat' : 'Open Chat'}
+    </button>
+  )}
+
+  {/* AI Chat Panel only for interviewers */}
+  {role === 'interviewer' && (
+    <div className="ai-chat-panel">
+      <AIChatPanel />
     </div>
+  )}
+
+  {/* Chat Popup */}
+  {isChatOpen && (
+    <div className={`chat-popup ${role === 'interviewer' ? 'chat-popup-interviewer' : ''}`}>
+      <Sidebar 
+        messages={messages} 
+        sendMessage={sendMessage}
+        username={username}
+        partners={partners}
+        role={role}
+            />
+          </div>
+        )}
+      </div> 
+  
+    </div> 
   );
-};
+}  
 
 export default CodePair;

@@ -1,0 +1,54 @@
+.code-output {
+    background-color: #1a1a1a;
+    border-top: 1px solid #383838;
+    height: 200px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 15px;
+    background-color: #252526;
+    border-bottom: 1px solid #383838;
+  }
+  
+  .output-header h3 {
+    margin: 0;
+    font-size: 14px;
+    color: #e0e0e0;
+  }
+  
+  .loading-indicator {
+    color: #ffd700;
+    font-size: 14px;
+    animation: pulse 1.5s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+  }
+  
+  .output-content {
+    flex: 1;
+    padding: 10px 15px;
+    overflow: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  .output-error {
+    color: #ff6b6b;
+  }
+  
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }

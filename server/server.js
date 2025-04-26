@@ -123,6 +123,7 @@ io.on('connection', (socket) => {
     });
   });
 
+  // Handle code running
   // Handle disconnection
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
