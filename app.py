@@ -3,6 +3,7 @@ from flask_cors import CORS
 import asyncio
 import os
 import wave
+import speech_recognition as sr
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
@@ -60,8 +61,17 @@ def process_text_endpoint():
     msg = data.get('message', '')
 
     async def process_text(msg):
-        config = {"response_modalities": ["TEXT"]}
-
+        config = {
+            "system_instruction": types.Content(
+                parts=[
+                    types.Part(
+                        text="You are a careful interviewer who wants to hire the best and most honest candidate."
+                    )
+                ]
+            ),
+            "response_modalities": ["TEXT"]
+        }
+        
         async with client.aio.live.connect(model=model, config=config) as session:
             await session.send_client_content(
                 turns={"role": "user", "parts": [{"text": msg}]}, turn_complete=True
@@ -76,6 +86,48 @@ def process_text_endpoint():
 
     response_text = loop.run_until_complete(process_text(msg))
     return jsonify({"response": response_text})
+
+
+
+@app.route('/recognize', methods=['POST'])
+def recognize_endpoint():
+    if 'audio' not in request.files:
+        return jsonify({"success": False, "error": "No audio file uploaded", "transcription": None}), 400
+
+    audio_file = request.files['audio']
+
+    recognizer = sr.Recognizer()
+
+    try:
+        with sr.AudioFile(audio_file) as source:
+            audio = recognizer.record(source)
+
+        transcription = recognizer.recognize_google(audio)
+        response = {
+            "success": True,
+            "error": None,
+            "transcription": transcription
+        }
+    except sr.RequestError:
+        response = {
+            "success": False,
+            "error": "API unavailable",
+            "transcription": None
+        }
+    except sr.UnknownValueError:
+        response = {
+            "success": True,
+            "error": "Unable to recognize speech",
+            "transcription": None
+        }
+    except Exception as e:
+        response = {
+            "success": False,
+            "error": str(e),
+            "transcription": None
+        }
+    
+    return jsonify(response)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=9999, debug=True)

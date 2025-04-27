@@ -51,6 +51,18 @@
   gap: 15px;
 }
 
+.audio-record-button {
+  padding: 5px 15px;
+  background-color: #3d3d3d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  min-width: 100px;
+  transition: background-color 0.2s;
+}
+
 .execute-button {
   padding: 5px 15px;
   background-color: #107c10;
