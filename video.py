@@ -39,10 +39,11 @@ Analyze this sequence of image frames, extracted approximately one second apart 
 Based *only* on the visual information in these frames, identify potential cheating behaviors or indicators of dishonesty. Focus on:
 
 1.  **Sustained Off-Screen Gaze:** Across multiple frames, is the interviewee consistently looking significantly away from the screen (up, down, far left/right), suggesting reading external material? Note the duration implied by the number of frames showing this. Differentiate from brief thinking glances visible in only one or two frames.
-2.  **Interaction with Hidden Items:** Do any frames show hands moving towards or interacting with unseen objects/devices below camera view? Does body posture change suspiciously across frames in a way that suggests hidden interaction?
-3.  **Suspicious Lip Movement:** In frames where the interviewee shouldn't be speaking, is there evidence of subtle lip movement or mouthing words, potentially indicating reading or receiving input?
-4.  **Anomalous Activity Correlation:** Do the frames show patterns like intently looking away *just before* or *during* visible pauses in activity (e.g., stopping typing, looking static before code appears)?
-5.  **Other Highly Suspicious Actions:** Any frames showing attempts to obscure the face/screen, frequent camera blockage, clear presence of others (reflections/shadows), or actions clearly inconsistent with a focused interview setting.
+2.  **Eye Movement:** Across the frames, is the interviewee making minor eye moevements or not directly looking straight. Any iris movements indicating reading or searching up.
+3.  **Interaction with Hidden Items:** Do any frames show hands moving towards or interacting with unseen objects/devices below camera view? Does body posture change suspiciously across frames in a way that suggests hidden interaction?
+4.  **Suspicious Lip Movement:** In frames where the interviewee shouldn't be speaking, is there evidence of subtle lip movement or mouthing words, potentially indicating reading or receiving input?
+5.  **Anomalous Activity Correlation:** Do the frames show patterns like intently looking away *just before* or *during* visible pauses in activity (e.g., stopping typing, looking static before code appears)?
+6.  **Other Highly Suspicious Actions:** Any frames showing attempts to obscure the face/screen, frequent camera blockage, clear presence of others (reflections/shadows), or actions clearly inconsistent with a focused interview setting.
 
 **Output Format:**
 - Provide a concise summary of visual observations based on the sequence of frames.
