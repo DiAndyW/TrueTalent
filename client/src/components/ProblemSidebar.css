@@ -1,60 +1,71 @@
 .problem-sidebar {
-    width: 300px;
-    min-width: 200px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    background-color: #252526; /* same background */
-  }
-  
-  .problem-header {
-    padding: 15px;
-    border-bottom: 1px solid #383838; /* same border */
-  }
-  
-  .problem-header h3 {
-    margin: 0 0 15px 0;
-  }
-  
-  .problem-list {
-    flex: 1;
-    padding: 15px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .problem-item {
-    padding: 8px 12px;
-    background-color: #333333; /* same as input background */
-    color: #e0e0e0;
-    border: 1px solid #555;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .problem-item:hover {
-    background-color: #3b3b3b; /* match chat message background */
-  }
+  width: 500px;
+  min-width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #252526; /* same background */
+}
 
-  .clear-problem-btn {
-    margin-top: 15px;
-    padding: 8px 12px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-  }
-  
-  .clear-problem-btn:hover {
-    background-color: #e0e0e0;
-  }
-  
-  .selected-problem {
-    padding: 15px;
-  }
-  
+.problem-header {
+  padding: 15px;
+  border-bottom: 1px solid #383838; /* same border */
+}
+
+.problem-header h3 {
+  margin: 0 0 15px 0;
+}
+
+.problem-list {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.problem-item {
+  padding: 8px 12px;
+  background-color: #333333; /* same as input background */
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.problem-item:hover {
+  background-color: #3b3b3b; /* match chat message background */
+}
+
+.problem-content {
+  overflow-y: auto; /* Enable scrolling for long descriptions */
+  word-break: break-word; /* Prevent long words from breaking layout */
+  padding: 15px; /* Add padding all around the content */
+}
+
+.problem-content img {
+  max-width: 100%; /* Make images scale down to the container width */
+  height: auto;    /* Maintain aspect ratio */
+}
+
+.clear-problem-btn {
+  margin-top: 15px;
+  padding: 8px 12px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.clear-problem-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.selected-problem {
+  padding: 15px;
+}
+

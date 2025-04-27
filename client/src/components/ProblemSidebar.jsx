@@ -30,8 +30,6 @@ const ProblemSidebar = ({ problems, role, selectedQuestion, pickQuestion }) => {
 
       {selectedQuestion ? (
         <div className="selected-problem">
-          <h4>{selectedQuestion.title}</h4>
-          {/* You can add more problem details here */}
           {role === 'interviewer' && (
             <button 
               className="clear-problem-btn" 
@@ -40,6 +38,15 @@ const ProblemSidebar = ({ problems, role, selectedQuestion, pickQuestion }) => {
               Choose Another Problem
             </button>
           )}
+          <h4>{selectedQuestion.title}</h4>
+          <p className="problem-difficulty">Difficulty: {selectedQuestion.difficulty}</p>
+          <div className="problem-content">
+            {selectedQuestion.content ? (
+              <div dangerouslySetInnerHTML={{ __html: selectedQuestion.content }} />
+            ) : (
+              <p>Problem details loading...</p>
+            )}
+          </div>
         </div>
       ) : (
         <>

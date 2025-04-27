@@ -41,6 +41,7 @@ const CodePair = () => {
   const [aiChatMessages, setAIChatMessages] = useState([]);
   const socketRef = useRef(null);
   const [problems, setProblems] = useState([]);
+  const [qDetail, setQDetail] = useState({});
   
   // Initialize socket connection
   useEffect(() => {
@@ -424,12 +425,15 @@ const CodePair = () => {
       
       <div className="main-content">
         {/* Problem sidebar should be to the left */}
-        <ProblemSidebar 
-          problems={problems} 
-          role={role}
-          selectedQuestion={selectedQuestion}
-          pickQuestion={pickQuestion}
-        />
+        <div className="sidebar-container">
+          <ProblemSidebar 
+            problems={problems} 
+            role={role}
+            selectedQuestion={selectedQuestion}
+            qDetail={qDetail}
+            pickQuestion={pickQuestion}
+          />
+        </div>
         
         <div className="editor-output-container">
           {/* Code editor in the middle */}
