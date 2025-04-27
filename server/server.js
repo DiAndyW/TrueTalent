@@ -1,12 +1,32 @@
 // server.js
+
+const fs = require('fs');
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
 
+//problem set
+const json = JSON.parse(fs.readFileSync('./problems.json', 'utf-8'));
+const problems = json.data.problemsetQuestionList.questions;
+
 const app = express();
 app.use(cors());
+
+// API endpoint to get all problems
+app.get('/api/problems', (req, res) => {
+  res.json(problems);
+});
+
+// API endpoint for search functionality
+app.get('/api/problems/search', (req, res) => {
+  const query = req.query.q || ''; // Search query from the frontend
+  const filteredProblems = problems.filter(problem => {
+    return problem.title.toLowerCase().includes(query.toLowerCase());
+  });
+  res.json(filteredProblems);
+});
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -102,31 +122,26 @@ io.on('connection', (socket) => {
       socket.to(roomId).emit('code-update', { code });
     }
   });
-  
+
   // Handle problem selection
   socket.on('question-selected', (data) => {
     const { roomId, problem } = data;
   
     if (rooms[roomId]) {
-      // Store the problem in the room
+      // Store the problem in the room (can be null when problem is cleared)
       rooms[roomId].problem = problem;
-      console.log(`Question selected in room ${roomId}:`, problem);
+      
+      if (problem === null) {
+        console.log(`Problem selection cleared in room ${roomId}`);
+      } else {
+        console.log(`Problem selected in room ${roomId}:`, problem.title || 'Untitled problem');
+      }
   
       // Broadcast the problem to all users in the room (except the sender)
       socket.to(roomId).emit('question-selected', { problem });
     }
   });
-  // socket.on('question-selected', (data) => {
-  //   const { roomId, problem } = data;
 
-  //   if (rooms[roomId]) {
-  //     // Optionally store the problem in the room
-  //     rooms[roomId].problem = problem;
-
-  //     // Broadcast the new problem to all users in the room (except the sender)
-  //     socket.to(roomId).emit('question-selected', { problem });
-  //   }
-  // });
 
   // Handle language changes
   socket.on('language-change', (data) => {

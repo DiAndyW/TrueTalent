@@ -8,19 +8,20 @@ import CodeOutput from './CodeOutput';
 import ProblemSidebar from './ProblemSidebar';
 import './CodePair.css';
 import AIChatPanel from './AIChatPanel'; // Import the AI chat panel
+import ProblemSearch from './ProblemSearch';
 
 const SOCKET_SERVER_URL = 'http://localhost:5001'; // Change this to your server URL
 
 //have this fetch all problems from leetcode graphql
 // then allow you to search through it
-const problems = [
-  { title: 'Two Sum' },
-  { title: 'Reverse Linked List' },
-  { title: 'Valid Parentheses' },
-  { title: 'Merge Intervals' },
-  { title: 'Binary Search' },
-  // Add more problems!
-];
+// const problems = [
+//   { title: 'Two Sum' },
+//   { title: 'Reverse Linked List' },
+//   { title: 'Valid Parentheses' },
+//   { title: 'Merge Intervals' },
+//   { title: 'Binary Search' },
+//   // Add more problems!
+// ];
 
 const CodePair = () => {
   const [connected, setConnected] = useState(false);
@@ -38,6 +39,7 @@ const CodePair = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const socketRef = useRef(null);
+  const [problems, setProblems] = useState([]);
   
   // Initialize socket connection
   useEffect(() => {
@@ -152,6 +154,44 @@ const CodePair = () => {
     };
   }, []);
 
+  // Add this useEffect to fetch problems from backend
+  useEffect(() => {
+    // Only fetch problems if connected and role is interviewer
+    if (connected && role === 'interviewer') {
+      fetchProblems();
+    }
+  }, [connected, role]);
+
+  const fetchProblems = async () => {
+    try {
+      const response = await fetch('http://localhost:5001/api/problems');
+      if (response.ok) {
+        const data = await response.json();
+        setProblems(data);
+      } else {
+        console.error('Failed to fetch problems');
+        // Set some default problems as fallback
+        setProblems([
+          { title: 'Two Sum' },
+          { title: 'Reverse Linked List' },
+          { title: 'Valid Parentheses' },
+          { title: 'Merge Intervals' },
+          { title: 'Binary Search' },
+        ]);
+      }
+    } catch (error) {
+      console.error('Error fetching problems:', error);
+      // Set some default problems as fallback
+      setProblems([
+        { title: 'Two Sum' },
+        { title: 'Reverse Linked List' },
+        { title: 'Valid Parentheses' },
+        { title: 'Merge Intervals' },
+        { title: 'Binary Search' },
+      ]);
+    }
+  };
+
   const joinRoom = (roomToJoin) => {
     if (username && roomToJoin) {
       socketRef.current.emit('join-room', {
@@ -180,12 +220,14 @@ const CodePair = () => {
   };
 
   const pickQuestion = (question) => {
-    console.log('Picking question:', question);
+    console.log('CodePair picking question:', question);
     setSelectedQuestion(question);
-    socketRef.current.emit('question-selected', {
-      roomId,
-      problem: question,  
-    });
+    if (socketRef.current) {
+      socketRef.current.emit('question-selected', {
+        roomId,
+        problem: question,  
+      });
+    }
   };
 
   const sendMessage = (message) => {
