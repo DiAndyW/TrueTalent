@@ -1,6 +1,13 @@
 LAHacks 2025
 Edwin, Hari, Andy, Peter
+
+##API KEYS
 Add a .env file for the gemini api key
 GEMINI_API_KEY="GEMINI API KEY GOES HERE"
 
-to run te video cheating detector you need to run the server and client like ususal but also run "video_server.py"
+
+##Local setup
+In client folder: npm run dev 
+In server folder: npm start
+To start the flask api: python app.py
+

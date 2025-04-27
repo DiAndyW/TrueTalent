@@ -127,6 +127,15 @@
   overflow: hidden; /* Prevent scrollbars on main layout */
 }
 
+.sidebar-container {
+  width: 500px; /* Set the desired width of the sidebar */
+  min-width: 200px;
+  flex-shrink: 0;
+  overflow-y: auto; /* Make the sidebar container scrollable */
+  display: flex;
+  flex-direction: column; /* Ensure ProblemSidebar stacks its children */
+}
+
 .editor-output-container {
   display: flex;
   flex-direction: column;

@@ -31,6 +31,7 @@ const CodePair = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [aiChatMessages, setAIChatMessages] = useState([]); // AI analysis messages
   const [problems, setProblems] = useState([]);
+
   const socketRef = useRef(null);
 
   // --- NEW Recording State & Refs ---
@@ -41,6 +42,10 @@ const CodePair = () => {
   const recordedChunksRef = useRef([]);
   const streamRef = useRef(null);
   const selectedMimeTypeRef = useRef(''); // To store the MIME type used for recording
+
+
+  const [qDetail, setQDetail] = useState({});
+  
 
   // Initialize socket connection
   useEffect(() => {
@@ -495,6 +500,7 @@ const CodePair = () => {
         </div>
 
         <div className="controls">
+
           {/* --- Video Recording Buttons (Interviewer Only) --- */}
           {role === 'interviewer' && (
             <>
@@ -525,6 +531,7 @@ const CodePair = () => {
           >
             {isExecuting ? 'Running...' : 'Run Code'}
           </button>
+
           <div className="language-selector">
             <select value={language} onChange={(e) => changeLanguage(e.target.value)}>
               <option value="javascript">JavaScript</option>
@@ -545,15 +552,19 @@ const CodePair = () => {
         )}
 
       <div className="main-content">
-        {/* Left: Problem Sidebar */}
-        <ProblemSidebar
-          problems={problems}
-          role={role}
-          selectedQuestion={selectedQuestion}
-          pickQuestion={pickQuestion}
-        />
 
-        {/* Center: Editor and Output */}
+        {/* Problem sidebar should be to the left */}
+        <div className="sidebar-container">
+          <ProblemSidebar 
+            problems={problems} 
+            role={role}
+            selectedQuestion={selectedQuestion}
+            qDetail={qDetail}
+            pickQuestion={pickQuestion}
+          />
+        </div>
+        
+
         <div className="editor-output-container">
           <CodeEditor
             code={code}
