@@ -85,6 +85,20 @@
   background-color: #e03141;
 }
 
+
+.audio-record-button {
+  padding: 5px 15px;
+  background-color: #3d3d3d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  min-width: 100px;
+  transition: background-color 0.2s;
+}
+
+
 /* Style when button is disabled (e.g., during analysis) */
 .recording-button:disabled {
   background-color: #555;
@@ -92,6 +106,7 @@
   opacity: 0.7;
 }
 /* --- End Recording Button Styles --- */
+
 
 .execute-button {
   padding: 5px 15px;
