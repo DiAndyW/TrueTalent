@@ -19,8 +19,7 @@ if not API_KEY:
 
 genai.configure(api_key=API_KEY)
 
-# Using gemini-1.5-flash-latest as requested
-MODEL_NAME = 'gemini-1.5-flash-latest'
+MODEL_NAME = 'gemini-2.5-flash-preview-04-17'
 
 try:
     model = genai.GenerativeModel(MODEL_NAME)

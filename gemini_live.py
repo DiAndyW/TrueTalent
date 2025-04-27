@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 load_dotenv()  
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-model = "gemini-2.0-flash-live-001"
+model = "gemini-2.5-flash-preview-04-17"
 
 async def async_enumerate(aiterable, start=0):
     index = start

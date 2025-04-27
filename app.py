@@ -14,7 +14,7 @@ app = Flask(__name__)
 CORS(app)
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-model = "gemini-2.0-flash-live-001"
+model = "gemini-2.5-flash-preview-04-17"
 
 # Create a global event loop (better way)
 loop = asyncio.new_event_loop()
