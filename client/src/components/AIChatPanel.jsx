@@ -1,22 +1,38 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import './AIChatPanel.css';
+import ReactMarkdown from 'react-markdown';
+// npm install react-markdown
 
-const AIChatPanel = () => {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+const AIChatPanel = ({ messages }) => {
+  const [input, setInput] = React.useState('');
   const messagesEndRef = useRef(null);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMessage = { sender: 'user', text: input };
-    setMessages(prev => [...prev, userMessage]);
+    console.log('Sending message:', input);
+    messages.push({ sender: 'user', text: input });
+    // messages.push({ sender: 'ai', text: `🤖 ${input}` });
 
-    setTimeout(() => {
-      const aiResponse = { sender: 'ai', text: `🤖 AI says: "${input}"` };
-      setMessages(prev => [...prev, aiResponse]);
-    }, 800);
+    try {
+      const response = await fetch('http://localhost:9999/process_text', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: input }),
+      });
+  
+      const data = await response.json();
+      const aiMessage = { sender: 'ai', text: data.response };
+      messages.push(aiMessage);
 
+    } catch (error) {
+      console.error('Error processing text:', error);
+      const errorMessage = { sender: 'ai', text: 'Sorry, something went wrong.' };
+      messages.push(errorMessage);
+    }
+  
     setInput('');
   };
 
@@ -35,9 +51,10 @@ const AIChatPanel = () => {
       <div className="ai-messages">
         {messages.map((msg, index) => (
           <div key={index} className={`ai-message ${msg.sender}`}>
-            {msg.text}
+            <ReactMarkdown>{msg.text}</ReactMarkdown>
           </div>
         ))}
+
         <div ref={messagesEndRef} />
       </div>
 
