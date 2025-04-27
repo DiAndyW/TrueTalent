@@ -31,6 +31,7 @@ const CodePair = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [aiChatMessages, setAIChatMessages] = useState([]); // AI analysis messages
   const [problems, setProblems] = useState([]);
+
   const socketRef = useRef(null);
 
   // --- Recording State & Refs ---
@@ -42,7 +43,11 @@ const CodePair = () => {
   const streamRef = useRef(null);
   const selectedMimeTypeRef = useRef('');
 
-  // --- Effects ---
+
+  const [qDetail, setQDetail] = useState({});
+  
+
+  // Initialize socket connection
   useEffect(() => {
     // Socket setup and listeners (same as before)
     socketRef.current = io(SOCKET_SERVER_URL);
@@ -304,7 +309,19 @@ const CodePair = () => {
 
       {/* Main Content Area (Layout same as before) */}
       <div className="main-content">
-        <ProblemSidebar problems={problems} role={role} selectedQuestion={selectedQuestion} pickQuestion={pickQuestion} />
+
+        {/* Problem sidebar should be to the left */}
+        <div className="sidebar-container">
+          <ProblemSidebar 
+            problems={problems} 
+            role={role}
+            selectedQuestion={selectedQuestion}
+            qDetail={qDetail}
+            pickQuestion={pickQuestion}
+          />
+        </div>
+        
+
         <div className="editor-output-container">
           <CodeEditor code={code} onChange={updateCode} language={language} />
           
