@@ -136,7 +136,7 @@ io.on('connection', (socket) => {
       if (problem === null) {
         console.log(`Problem selection cleared in room ${roomId}`);
       } else {
-        console.log(`Problem selected in room ${roomId}:`, problem.title || 'Untitled problem');
+        console.log(`Problem selected in room ${roomId}:`, problem.difficulty || 'Untitled problem');
       }
   
       // Broadcast the problem to all users in the room (except the sender)
