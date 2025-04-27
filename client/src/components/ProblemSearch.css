@@ -1,6 +1,5 @@
 /* client/src/components/ProblemSearch.css */
 .problem-search {
-
     width: 100%;
     display: flex; /* Enable flexbox for centering */
     flex-direction: column; /* Stack input and results vertically */

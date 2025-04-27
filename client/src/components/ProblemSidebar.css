@@ -3,7 +3,7 @@
   /* ... other styles like flex, overflow-y, gap ... */
 
   /* ADJUSTED THIS LINE: Added right padding for scrollbar space */
-  padding: 10px 5px 10px 10px;
+  /* padding: 10px 5px 10px 10px; */
 
   /* --- ADDED THESE LINES for Firefox Scrollbar --- */
   scrollbar-width: thin;          /* Make scrollbar narrow */
@@ -89,18 +89,22 @@
 }
 
 .clear-problem-btn {
-  margin-top: 15px;
-  padding: 8px 12px;
-  background-color: #f0f0f0;
+  width: 50%;
+  padding: 8px;
+  background-color: #252526;
   border: 1px solid #ccc;
+  background-color: #333;
+  color: #e0e0e0; /* Set a visible text color */
   border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
+  cursor: pointer; /* Add cursor for better UX */
+  margin-top: 15px;
+  margin-bottom: 15px;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .clear-problem-btn:hover {
-  background-color: #e0e0e0;
+  background-color: #3a3a3a; /* Slightly darker shade of the original */
+  color: #ffffff; /* Ensure text remains visible on hover */
 }
 
 .selected-problem {
