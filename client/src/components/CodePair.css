@@ -1,3 +1,5 @@
+/* --- START OF FULL CodePair.css --- */
+
 .codepair-container {
   display: flex;
   flex-direction: column;
@@ -11,7 +13,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  height: 60px;
+  height: 60px; /* Base height */
+  min-height: 60px; /* Ensure it doesn't shrink below this */
   background-color: #252526;
   border-bottom: 1px solid #383838;
 }
@@ -48,8 +51,45 @@
 .controls {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px; /* Adjusted gap for more buttons */
+  flex-wrap: wrap; /* Allow controls to wrap on smaller screens */
 }
+
+/* --- Styles for Recording Buttons --- */
+.recording-button {
+  padding: 5px 12px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  min-width: 80px;
+  transition: background-color 0.2s, opacity 0.2s;
+  font-size: 0.9em;
+}
+
+.start-recording-button {
+  background-color: #007acc; /* Blue */
+}
+
+.start-recording-button:hover {
+  background-color: #0090f0;
+}
+
+.stop-recording-button {
+  background-color: #d11a2a; /* Red */
+}
+
+.stop-recording-button:hover {
+  background-color: #e03141;
+}
+
+.recording-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+/* --- End Recording Button Styles --- */
 
 .execute-button {
   padding: 5px 15px;
@@ -84,15 +124,43 @@
 .main-content {
   display: flex;
   flex: 1;
-  overflow: hidden;
+  overflow: hidden; /* Prevent scrollbars on main layout */
 }
 
 .editor-output-container {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  overflow: hidden;
+  flex: 1; /* Take up remaining space */
+  overflow: hidden; /* Allow internal scrolling if needed */
 }
+
+/* Container for Interviewer tools below output */
+.interviewer-tools {
+  background-color: #252526;
+  padding: 10px;
+  border-top: 1px solid #383838;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  align-items: center;
+}
+
+.analyze-code-button {
+  /* Style for the text analysis button */
+  padding: 5px 10px;
+  background-color: #6c757d; /* Example grey color */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.9em;
+}
+
+.analyze-code-button:hover {
+  background-color: #5a6268;
+}
+
 
 .login-container {
   display: flex;
@@ -108,7 +176,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 400px;
+  width: 90%; /* Responsive width */
+  max-width: 400px; /* Max width */
   background-color: #252526;
   padding: 30px;
   border-radius: 8px;
@@ -139,6 +208,12 @@
   background-color: #1177bb;
 }
 
+.login-form button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+
 .room-actions {
   display: flex;
   flex-direction: column;
@@ -158,6 +233,7 @@
   text-align: center;
   font-style: italic;
   color: #888;
+  margin: 5px 0;
 }
 
 .role-select {
@@ -175,6 +251,7 @@
   color: #b5eaff;
   letter-spacing: 0.5px;
   margin-right: 5px;
+  flex-shrink: 0; /* Prevent label from shrinking */
 }
 
 .role-select select {
@@ -187,6 +264,7 @@
   outline: none;
   transition: border 0.2s, background 0.2s;
   cursor: pointer;
+  flex-grow: 1; /* Allow select to take available space */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -194,7 +272,7 @@
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 18px;
-  padding-right: 32px;
+  padding-right: 32px; /* Space for arrow */
 }
 
 .role-select select:focus {
@@ -211,12 +289,14 @@
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #333;
+  background-color: rgba(51, 51, 51, 0.9); /* Slightly transparent black */
   color: white;
-  padding: 8px 16px;
+  padding: 10px 20px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
+  z-index: 1050; /* High z-index */
+  font-size: 0.9em;
+  pointer-events: none; /* Don't block clicks */
 }
 
 .error-message {
@@ -226,29 +306,11 @@
   padding: 10px;
   border-radius: 4px;
   text-align: center;
+  margin-bottom: 15px; /* Spacing */
 }
 
-
-.chat-toggle-button {
-  position: fixed;          /* Fixed position instead of flex */
-  bottom: 20px;             /* Distance from bottom */
-  right: 330px;             /* Position it to the left of the AI chat panel */
-  background-color: #0e639c;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.2s;
-  z-index: 1000;            /* Ensure it's above other elements */
-}
-
-.chat-toggle-button_interviewee {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;              /* Right side of the screen */
+/* General Chat Toggle Button Styles (applied to both if not overridden) */
+.chat-toggle-button-base {
   background-color: #0e639c;
   color: white;
   padding: 8px 16px;
@@ -261,17 +323,41 @@
   z-index: 1000;
 }
 
-
-.chat-toggle-button:hover {
+.chat-toggle-button-base:hover {
   background-color: #1177bb;
 }
 
+
+/* Fixed position for INTERVIEWEE chat toggle */
+.chat-toggle-button_interviewee {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  /* Inherits base styles */
+}
+.chat-toggle-button_interviewee:hover {
+   background-color: #1177bb;
+}
+
+/* Static position for INTERVIEWER chat toggle (when inside interviewer-tools) */
+.interviewer-tools .chat-toggle-button {
+  /* Inherits base styles */
+  /* position: static is default, no need to declare */
+  font-size: 0.9em; /* Match analyze button size */
+  padding: 5px 10px; /* Match analyze button size */
+}
+.interviewer-tools .chat-toggle-button:hover {
+   background-color: #1177bb;
+}
+
+
 .chat-popup {
   position: fixed;
-  bottom: 80px; /* above the toggle button */
-  right: 20px;
+  bottom: 80px; /* Position above the toggle button */
+  right: 20px; /* Default position (for interviewee) */
   width: 300px;
   height: 400px;
+  max-height: calc(100vh - 100px); /* Prevent overflow on short screens */
   background-color: #252526;
   border: 1px solid #383838;
   border-radius: 8px;
@@ -279,144 +365,128 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  z-index: 1001;
+  z-index: 1001; /* Above toggle button */
 }
-/* Special Position for Interviewer */
+
+/* Special Position for Interviewer's Chat Popup */
 .chat-popup-interviewer {
-  bottom: 80px; /* Raise above Output */
-  right: 330px;
+  bottom: 80px; /* Same vertical position */
+  right: 330px; /* Position it relative to where AI panel starts */
 }
 
-/* Optional: Make responsive */
+/* AI Chat Panel Styles */
+.ai-chat-panel {
+  width: 300px; /* Fixed width */
+  flex-shrink: 0; /* Prevent shrinking */
+  border-left: 1px solid #383838;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Let AIChatPanel handle internal scroll */
+  background-color: #252526; /* Match theme */
+}
+
+
+/* Responsive Adjustments */
 @media (max-width: 1200px) {
+  /* Adjust interviewer chat popup position on medium screens */
   .chat-popup-interviewer {
-    left: 400px;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    height: 60px;
-    background-color: #252526;
-    border-bottom: 1px solid #383838;
-  }
-  
-  .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #4dc9ff;
-  }
-  
-  .room-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .room-id {
-    font-weight: bold;
-    color: #4dc9ff;
-  }
-  
-  .partner {
-    background-color: #2d2d2d;
-    padding: 4px 8px;
-    border-radius: 4px;
-  }
-  
-  .invite-button {
-    padding: 5px 10px;
-    background-color: #0e639c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .interviewer-tools {
-    background-color: #252526;
+    right: 20px; /* Move it to the edge like interviewee's */
   }
 
-  .language-selector select {
-    background-color: #333333;
-    color: #e0e0e0;
-    border: 1px solid #555;
+  /* Hide AI panel and adjust layout maybe? Or let things wrap */
+  /* Example: Hiding AI panel on smaller screens */
+  /* .ai-chat-panel { display: none; } */
+  /* If hiding AI panel, interviewer chat popup might need different position */
+  /* .chat-popup-interviewer { right: 20px; } */
+
+  /* Adjust header padding and allow controls to wrap better */
+  .header {
+    padding: 10px 15px; /* Reduce padding */
+    height: auto; /* Allow height to grow if controls wrap */
+  }
+
+  .controls {
+     gap: 8px; /* Slightly reduce gap when wrapping */
+  }
+
+  /* --- Keep original rules from user's file below --- */
+  /* Note: Some of these might be redundant if defined outside media query */
+  /* It's generally better to define base styles outside and only overrides/additions inside */
+
+  /* .header { ... } */ /* Already adjusted above */
+  /* .logo { ... } */   /* No change needed */
+  /* .room-info { ... } */ /* No change needed */
+  /* .room-id { ... } */ /* No change needed */
+  /* .partner { ... } */ /* No change needed */
+
+  .invite-button { /* Style from original media query - keep if used */
     padding: 5px 10px;
-    border-radius: 4px;
-    outline: none;
-  }
-  
-  .main-content {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-  
-  .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 400px;
-    background-color: #252526;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  .login-form input {
-    padding: 10px;
-    background-color: #333333;
-    border: 1px solid #555;
-    color: #e0e0e0;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .login-form button {
-    padding: 10px 15px;
     background-color: #0e639c;
     color: white;
     border: none;
     border-radius: 4px;
-    font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.2s;
   }
-  
-  .login-form button:hover {
-    background-color: #1177bb;
-  }
-  
-  .room-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .action-group {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .action-group input {
-    flex: 1;
-  }
-  
-  .action-divider {
-    text-align: center;
-    font-style: italic;
-    color: #888;
-  }
+
+  /* .interviewer-tools { ... } */ /* Defined outside, no change needed */
+  /* .language-selector select { ... } */ /* Defined outside, no change needed */
+  /* .main-content { ... } */ /* Defined outside, no change needed */
+  /* .login-container { ... } */ /* Defined outside, no change needed */
+  /* .login-form { ... } */ /* Defined outside, no change needed */
+  /* .login-form input { ... } */ /* Defined outside, no change needed */
+  /* .login-form button { ... } */ /* Defined outside, no change needed */
+  /* .login-form button:hover { ... } */ /* Defined outside, no change needed */
+  /* .room-actions { ... } */ /* Defined outside, no change needed */
+  /* .action-group { ... } */ /* Defined outside, no change needed */
+  /* .action-group input { ... } */ /* Defined outside, no change needed */
+  /* .action-divider { ... } */ /* Defined outside, no change needed */
 }
+
+
+@media (max-width: 768px) {
+  /* Further adjustments for smaller screens */
+  .header {
+      flex-direction: column; /* Stack header items */
+      height: auto;
+      padding: 10px;
+  }
+  .room-info {
+      margin: 10px 0; /* Add spacing */
+  }
+  .controls {
+      justify-content: center; /* Center controls */
+      width: 100%;
+  }
+  .main-content {
+      flex-direction: column; /* Stack main sections */
+  }
+  .problem-sidebar { /* Assuming this class exists for ProblemSidebar */
+      width: 100%;
+      height: 250px; /* Example fixed height */
+      border-right: none;
+      border-bottom: 1px solid #383838;
+  }
+  .ai-chat-panel {
+      display: none; /* Hide AI panel on very small screens */
+  }
+  .chat-popup-interviewer {
+      right: 20px; /* Ensure popup is visible */
+      bottom: 20px; /* Maybe adjust vertical position */
+      width: calc(100vw - 40px); /* Make popup wider */
+  }
+   .chat-popup {
+        width: calc(100vw - 40px); /* Make popup wider */
+        bottom: 70px; /* Adjust if toggle button moves */
+   }
+   .chat-toggle-button_interviewee {
+       bottom: 10px; /* Lower interviewee button slightly */
+   }
+
+   .login-form {
+       width: 95%;
+       padding: 20px;
+   }
+}
+
+
+/* --- END OF FULL CodePair.css --- */
