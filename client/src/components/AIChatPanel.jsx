@@ -51,7 +51,11 @@ const AIChatPanel = ({ messages }) => {
       <div className="ai-messages">
         {messages.map((msg, index) => (
           <div key={index} className={`ai-message ${msg.sender}`}>
-            <ReactMarkdown>{msg.text}</ReactMarkdown>
+            <ReactMarkdown>{msg.text
+          .replace(/^\s*\*\s+/gm, '\n') // Remove bullet points (lines starting with a *)
+          .replace(/^\s*\d+\.\s+/gm, '\n') // Remove numbered list (lines starting with a number and a dot)
+          .replace("* **", "")
+          .replace("/ ", "")}</ReactMarkdown>
           </div>
         ))}
 

@@ -1,3 +1,36 @@
+/* Inside the existing .ai-messages rule: */
+.problem-sidebar {
+  /* ... other styles like flex, overflow-y, gap ... */
+
+  /* ADJUSTED THIS LINE: Added right padding for scrollbar space */
+  padding: 10px 5px 10px 10px;
+
+  /* --- ADDED THESE LINES for Firefox Scrollbar --- */
+  scrollbar-width: thin;          /* Make scrollbar narrow */
+  scrollbar-color: #555 #2d2d44;   /* Thumb color and Track color */
+}
+
+/* --- ADDED THESE ENTIRE RULES for WebKit Scrollbars --- */
+/* WebKit Browsers (Chrome, Safari, Edge, etc.) */
+.problem-sidebar::-webkit-scrollbar {
+  width: 8px;               /* Width of the scrollbar */
+}
+
+.problem-sidebar::-webkit-scrollbar-track {
+  background: #2d2d44;        /* Background of the track */
+  border-radius: 4px;       /* Optional: round the track */
+}
+
+.problem-sidebar::-webkit-scrollbar-thumb {
+  background-color: #555;    /* Color of the draggable scroll handle */
+  border-radius: 4px;       /* Roundness of the scroll handle */
+  border: 1px solid #2d2d44;  /* Optional: Creates slight inset look */
+}
+
+.problem-sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: #777;    /* Slightly lighter handle on hover */
+}
+/* --- End of Added/Changed Scrollbar Styles --- */
 .problem-sidebar {
   width: 400px;
   min-width: 200px;

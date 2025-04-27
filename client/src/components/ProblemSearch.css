@@ -10,6 +10,7 @@
   .problem-search input {
     width: 50%;
     padding: 8px;
+    background-color: #252526;
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-top: 15px;
