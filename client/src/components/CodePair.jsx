@@ -410,13 +410,6 @@ const CodePair = () => {
         </div>
 
         <div className="controls">
-          <button 
-            className="execute-button" 
-            onClick={executeCode}
-            disabled={isExecuting}
-          >
-            {isExecuting ? 'Running...' : 'Run Code'}
-          </button>
           <div className="language-selector">
             <select value={language} onChange={(e) => changeLanguage(e.target.value)}>
               <option value="javascript">JavaScript</option>

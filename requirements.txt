@@ -1,0 +1,8 @@
+flask
+flask_cors
+asyncio
+os
+wave
+google
+google.genai
+python-dotenv
