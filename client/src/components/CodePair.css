@@ -128,12 +128,13 @@
 }
 
 .sidebar-container {
-  width: 500px; /* Set the desired width of the sidebar */
+  width: 400px; /* Set the desired width of the sidebar */
   min-width: 200px;
   flex-shrink: 0;
   overflow-y: auto; /* Make the sidebar container scrollable */
   display: flex;
   flex-direction: column; /* Ensure ProblemSidebar stacks its children */
+  background: #252526;
 }
 
 .editor-output-container {
