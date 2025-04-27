@@ -302,7 +302,7 @@ const CodePair = () => {
     // Login Screen (same as before)
     return (
       <div className="login-container">
-        <h1>CodePair</h1>
+        <h1>TrueTalent</h1>
         <div className="login-form">
           {error && <div className="error-message">{error}</div>}
           <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
@@ -331,7 +331,7 @@ const CodePair = () => {
     <div className="codepair-container">
       <div className="header">
         <div className="logo">
-          CodePair - {role === 'interviewer' ? 'Interviewer' : 'Interviewee'} View
+          TrueTalent - {role === 'interviewer' ? 'Interviewer' : 'Interviewee'} View
         </div>
         <div className="room-info">
           Room: <span className="room-id" onClick={copyRoomIdToClipboard} title="Click to copy">{roomId || 'N/A'}</span>
