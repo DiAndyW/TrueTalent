@@ -6,7 +6,7 @@ Our project hopes to resolve this issue. True Talent is a code-interview website
 
 ## Acknowledgements
 
-Built at LAHacks 2025. Thanks to all the organizers for hosting this event!
+Built at LAHacks 2025. Thanks to all the organizers and sponsors for making this event possible!
 
 ## Authors
 
