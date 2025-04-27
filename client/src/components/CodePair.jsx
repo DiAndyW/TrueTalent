@@ -40,6 +40,7 @@ const CodePair = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const socketRef = useRef(null);
   const [problems, setProblems] = useState([]);
+  const [qDetail, setQDetail] = useState({});
   
   // Initialize socket connection
   useEffect(() => {
@@ -439,6 +440,7 @@ const CodePair = () => {
           problems={problems} 
           role={role}
           selectedQuestion={selectedQuestion}
+          qDetail={qDetail}
           pickQuestion={pickQuestion}
         />
         
