@@ -99,6 +99,22 @@
 }
 
 
+.start-audio-recording-button {
+  background-color: #007acc; /* Blue */
+}
+.start-audio-recording-button:hover {
+  background-color: #0090f0;
+}
+
+/* Style when the button is in 'Stop' state */
+.stop-audio-recording-button {
+  background-color: #d11a2a; /* Red */
+}
+.stop-audio-recording-button:hover {
+  background-color: #e03141;
+}
+
+
 /* Style when button is disabled (e.g., during analysis) */
 .recording-button:disabled {
   background-color: #555;
